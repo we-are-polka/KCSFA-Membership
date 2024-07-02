@@ -15,14 +15,14 @@ var KTSignupGeneral = function () {
             form,
             {
                 fields: {
-                    'first-name': {
+                    'first_name': {
                         validators: {
                             notEmpty: {
                                 message: 'First Name is required'
                             }
                         }
                     },
-                    'last-name': {
+                    'last_name': {
                         validators: {
                             notEmpty: {
                                 message: 'Last Name is required'
@@ -40,7 +40,7 @@ var KTSignupGeneral = function () {
                             }
                         }
                     },
-                    'password': {
+                    'password1': {
                         validators: {
                             notEmpty: {
                                 message: 'The password is required'
@@ -55,14 +55,14 @@ var KTSignupGeneral = function () {
                             }
                         }
                     },
-                    'confirm-password': {
+                    'password2': {
                         validators: {
                             notEmpty: {
                                 message: 'The password confirmation is required'
                             },
                             identical: {
                                 compare: function () {
-                                    return form.querySelector('[name="password"]').value;
+                                    return form.querySelector('[name="password1"]').value;
                                 },
                                 message: 'The password and its confirm are not the same'
                             }
@@ -95,7 +95,7 @@ var KTSignupGeneral = function () {
         submitButton.addEventListener('click', function (e) {
             e.preventDefault();
 
-            validator.revalidateField('password');
+            validator.revalidateField('password1');
 
             validator.validate().then(function (status) {
                 if (status == 'Valid') {
@@ -115,7 +115,7 @@ var KTSignupGeneral = function () {
 
                         // Show message popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                         Swal.fire({
-                            text: "You have successfully reset your password!",
+                            text: "You have registered successfully!",
                             icon: "success",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
@@ -152,9 +152,9 @@ var KTSignupGeneral = function () {
         });
 
         // Handle password input
-        form.querySelector('input[name="password"]').addEventListener('input', function () {
+        form.querySelector('input[name="password1"]').addEventListener('input', function () {
             if (this.value.length > 0) {
-                validator.updateFieldStatus('password', 'NotValidated');
+                validator.updateFieldStatus('password1', 'NotValidated');
             }
         });
     }
@@ -207,7 +207,7 @@ var KTSignupGeneral = function () {
                             },
                             identical: {
                                 compare: function () {
-                                    return form.querySelector('[name="password"]').value;
+                                    return form.querySelector('[name="password1"]').value;
                                 },
                                 message: 'The password and its confirm are not the same'
                             }
@@ -250,10 +250,20 @@ var KTSignupGeneral = function () {
                     // Disable button to avoid multiple click
                     submitButton.disabled = true;
 
+                    // Fetch CSRF token
+                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                    
 
                     // Check axios library docs: https://axios-http.com/docs/intro
-                    axios.post(submitButton.closest('form').getAttribute('action'), new FormData(form)).then(function (response) {
-                        if (response) {
+                    axios.post(submitButton.closest('form').getAttribute('action'), new FormData(form), {
+                        headers: {
+                        'X-Requested-With': 'XMLHttpRequest',  // Set X-Requested-With header for Django to recognize AJAX
+                        'X-CSRFToken': csrftoken
+                    }
+            
+                }).then(function (response) {
+                        if (response.data.success) {
+                            console.log("Response received:", response.data); // Debugging)
                             form.reset();
 
                             const redirectUrl = form.getAttribute('data-kt-redirect-url');
@@ -307,7 +317,7 @@ var KTSignupGeneral = function () {
         });
 
         // Handle password input
-        form.querySelector('input[name="password"]').addEventListener('input', function () {
+        form.querySelector('input[name="password1"]').addEventListener('input', function () {
             if (this.value.length > 0) {
                 validator.updateFieldStatus('password', 'NotValidated');
             }

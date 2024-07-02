@@ -8,23 +8,52 @@ from django.http import JsonResponse
 
 # Create your views here.
 def register_user(request):
-    form  = SignUpForm()
+    form = SignUpForm()
+
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()  # Save the user
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
-            #login user
-            user = authenticate(username = username, password = password)
-            login(request, user)
-            messages.success(request, ("You have registered successfully...."))
-            return redirect('home')
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                login(request, user)  # Log in the user
+                messages.success(request, "You have registered successfully!")
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Check if the request is AJAX
+                    return JsonResponse({'success': True})
+                else:
+                    return redirect('home')
+            else:
+                messages.error(request, "Failed to log in after registration.")
         else:
-            messages.success(request, ("Whoops! There was a problem, Please try again...."))
-            return redirect('home')
-    else:
-        return render(request, 'b_auth/register.html', {'form': form})
+            errors = form.errors.as_json()
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Check if the request is AJAX
+                return JsonResponse({'success': False, 'errors': errors})
+            else:
+                messages.error(request, "Registration failed. Please correct the errors.")
+
+    return render(request, 'b_auth/register.html', {'form': form})
+
+# def register_user(request):
+#     form  = SignUpForm()
+#     if request.method == "POST":
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password1']
+#             #login user
+#             user = authenticate(username = username, password = password)
+#             login(request, user)
+#             messages.success(request, ("You have registered successfully...."))
+#             return redirect('home')
+#         else:
+#             messages.success(request, ("Whoops! There was a problem, Please try again...."))
+#             return redirect('home')
+#     else:
+#         return render(request, 'b_auth/register.html', {'form': form})
 
 def login_user(request):
     if request.method == "POST":

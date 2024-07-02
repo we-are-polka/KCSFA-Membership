@@ -1,32 +1,9 @@
+{% extends 'b_auth/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-	<!--begin::Head-->
-	<head><base href="../../"/>
-		<title>{% block title %} Register {% endblock title %} | KCSFA Members Portal</title>
-		<meta charset="utf-8" />
-		<meta name="description" content="KCSFA Members Portal" />
-		<meta name="keywords" content="KCSFA Members Portal" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta property="og:locale" content="en_US" />
-		<meta property="og:type" content="article" />
-		<meta property="og:title" content="KCSFA Membership Portal" />
-		<meta property="og:url" content="https://kcsfa.co.ke" />
-		<meta property="og:site_name" content="KCSFA | Members Portal" />
-		<link rel="canonical" href="https://kcsfa.co.ke" />
-		<link rel="shortcut icon" href="media/logos/KCSFA favicon.svg" />
-		<!--begin::Fonts(mandatory for all pages)-->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-		<!--end::Fonts-->
-		<!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-		<link href="{% static 'plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
-		<link href="{% static 'css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
-		<!--end::Global Stylesheets Bundle-->
-		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
-	</head>
-	<!--end::Head-->
-	<!--begin::Body-->
+
+{% block title %} Log In {% endblock title %}
+
+{% block content %}
 	<body id="kt_body" class="app-blank">
 		<!--begin::Theme mode setup on page load-->
 		<script>
@@ -38,22 +15,22 @@
 			<!--begin::Authentication - Sign-in -->
 			<div class="d-flex flex-column flex-lg-row flex-column-fluid">
 				<!--begin::Aside-->
-				<div class="d-flex flex-column flex-lg-row-auto bg-primary w-xl-600px positon-xl-relative">
+				<div class="d-flex flex-column flex-lg-row-auto bg-primary w-xl-600px positon-xl-relative" style="background-image: url('media/key.jpg'); background-size: 600px auto;">
 					<!--begin::Wrapper-->
 					<div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px scroll-y">
 						<!--begin::Header-->
 						<div class="d-flex flex-row-fluid flex-column text-center p-5 p-lg-10 pt-lg-20">
 							<!--begin::Logo-->
-							<a href="../dist/index.html" class="py-2 py-lg-20">
-								<img alt="Logo" src="media/logos/mail.svg" class="h-40px h-lg-50px" />
+							<a href="{% url 'home' %}" class="py-2 py-lg-20">
+								<img alt="Logo" src="media/logos/KCSFA Landscape Transparent.svg" class="h-40px h-lg-50px" />
 							</a>
 							<!--end::Logo-->
 							<!--begin::Title-->
-							<h1 class="d-none d-lg-block fw-bold text-white fs-2qx pb-5 pb-md-10">Welcome to Saul HTML Free</h1>
+							<!-- <h1 class="d-none d-lg-block fw-bold text-white fs-2qx pb-5 pb-md-10">Welcome to Saul HTML Free</h1> -->
 							<!--end::Title-->
 							<!--begin::Description-->
-							<p class="d-none d-lg-block fw-semibold fs-2 text-white">Plan your blog post by choosing a topic creating
-							<br />an outline and checking facts</p>
+							<!-- <p class="d-none d-lg-block fw-semibold fs-2 text-white">Plan your blog post by choosing a topic creating -->
+							<!-- <br />an outline and checking facts</p> -->
 							<!--end::Description-->
 						</div>
 						<!--end::Header-->
@@ -128,15 +105,15 @@
 									<a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
 									<img alt="Logo" src="media/svg/brand-logos/google-icon.svg" class="h-20px me-3" />Continue with Google</a>
 									<!--end::Google link-->
-									<!--begin::Google link-->
-									<a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-									<img alt="Logo" src="media/svg/brand-logos/facebook-4.svg" class="h-20px me-3" />Continue with Facebook</a>
-									<!--end::Google link-->
-									<!--begin::Google link-->
-									<a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100">
+									<!--begin::Facebook link-->
+									<!-- <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
+									<img alt="Logo" src="media/svg/brand-logos/facebook-4.svg" class="h-20px me-3" />Continue with Facebook</a> -->
+									<!--end::Facebook link-->
+									<!--begin::Apple link-->
+									<!-- <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100">
 									<img alt="Logo" src="media/svg/brand-logos/apple-black.svg" class="theme-light-show h-20px me-3" />
-									<img alt="Logo" src="media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-20px me-3" />Continue with Apple</a>
-									<!--end::Google link-->
+									<img alt="Logo" src="media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-20px me-3" />Continue with Apple</a> -->
+									<!--end::Apple link-->
 								</div>
 								<!--end::Actions-->
 							</form>
@@ -149,9 +126,9 @@
 					<div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
 						<!--begin::Links-->
 						<div class="d-flex flex-center fw-semibold fs-6">
-							<a href="https://keenthemes.com" class="text-muted text-hover-primary px-2" target="_blank">About</a>
-							<a href="https://devs.keenthemes.com" class="text-muted text-hover-primary px-2" target="_blank">Support</a>
-							<a href="https://keenthemes.com/products/saul-html-pro" class="text-muted text-hover-primary px-2" target="_blank">Purchase</a>
+							<a href="https://kscfa.co.ke/about/" class="text-muted text-hover-primary px-2" target="_blank">About Us</a>
+							<a href="https://kscfa.co.ke/terms-and-conditions" class="text-muted text-hover-primary px-2" target="_blank">Terms and Conditions</a>
+							<a href="https://kscfa.co.ke/DPA" class="text-muted text-hover-primary px-2" target="_blank">DPA</a>
 						</div>
 						<!--end::Links-->
 					</div>
@@ -173,5 +150,4 @@
 		<!--end::Custom Javascript-->
 		<!--end::Javascript-->
 	</body>
-	<!--end::Body-->
-</html>
+{% endblock content %}
