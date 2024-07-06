@@ -1,4 +1,7 @@
 {% extends "./base.html" %}
+
+<title>{% block title%} Home {% endblock title %}</title>
+
 {% block content %}
 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
     <!--begin::Content wrapper-->
@@ -26,7 +29,7 @@
                             </li>
                             <!--end::Item-->
                             <!--begin::Item-->
-                            <li class="breadcrumb-item text-gray-700 fw-bold lh-1">Dashboards</li>
+                            <li class="breadcrumb-item text-gray-700 fw-bold lh-1">Dashboard</li>
                             <!--end::Item-->
                             <!--begin::Item-->
                             <li class="breadcrumb-item">
@@ -34,12 +37,12 @@
                             </li>
                             <!--end::Item-->
                             <!--begin::Item-->
-                            <li class="breadcrumb-item text-gray-700">Default</li>
+                            <li class="breadcrumb-item text-gray-700">Home</li>
                             <!--end::Item-->
                         </ul>
                         <!--end::Breadcrumb-->
                         <!--begin::Title-->
-                        <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bolder fs-1 lh-0">Dashboard</h1>
+                        <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bolder fs-1 lh-0">Welcome, {{ user.username | title }}</h1>
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->
