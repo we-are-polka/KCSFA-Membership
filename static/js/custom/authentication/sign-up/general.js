@@ -29,6 +29,13 @@ var KTSignupGeneral = function () {
                             }
                         }
                     },
+                    'username': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Username is required'
+                            }
+                        }
+                    },                    
                     'email': {
                         validators: {
                             regexp: {
@@ -84,8 +91,8 @@ var KTSignupGeneral = function () {
                     }),
                     bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: '.fv-row',
-                        eleInvalidClass: '',  // comment to enable invalid state icons
-                        eleValidClass: '' // comment to enable valid state icons
+                        // eleInvalidClass: '',  // comment to enable invalid state icons
+                        // eleValidClass: '' // comment to enable valid state icons
                     })
                 }
             }
@@ -174,6 +181,13 @@ var KTSignupGeneral = function () {
                             }
                         }
                     },
+                    'username': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Username is required'
+                            }
+                        }
+                    },
                     'email': {
                         validators: {
                             regexp: {
@@ -185,7 +199,7 @@ var KTSignupGeneral = function () {
                             }
                         }
                     },
-                    'password': {
+                    'password1': {
                         validators: {
                             notEmpty: {
                                 message: 'The password is required'
@@ -200,7 +214,7 @@ var KTSignupGeneral = function () {
                             }
                         }
                     },
-                    'password_confirmation': {
+                    'password2': {
                         validators: {
                             notEmpty: {
                                 message: 'The password confirmation is required'
@@ -229,8 +243,8 @@ var KTSignupGeneral = function () {
                     }),
                     bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: '.fv-row',
-                        eleInvalidClass: '',  // comment to enable invalid state icons
-                        eleValidClass: '' // comment to enable valid state icons
+                        // eleInvalidClass: '',  // comment to enable invalid state icons
+                        // eleValidClass: '' // comment to enable valid state icons
                     })
                 }
             }
@@ -240,7 +254,7 @@ var KTSignupGeneral = function () {
         submitButton.addEventListener('click', function (e) {
             e.preventDefault();
 
-            validator.revalidateField('password');
+            validator.revalidateField('password1');
 
             validator.validate().then(function (status) {
                 if (status == 'Valid') {
@@ -260,8 +274,8 @@ var KTSignupGeneral = function () {
                         'X-Requested-With': 'XMLHttpRequest',  // Set X-Requested-With header for Django to recognize AJAX
                         'X-CSRFToken': csrftoken
                     }
-            
-                }).then(function (response) {
+                    })
+                    .then(function (response) {
                         if (response.data.success) {
                             console.log("Response received:", response.data); // Debugging)
                             form.reset();
@@ -284,6 +298,7 @@ var KTSignupGeneral = function () {
                             });
                         }
                     }).catch(function (error) {
+                        console.log(error)
                         Swal.fire({
                             text: "Sorry, looks like there are some errors detected, please try again.",
                             icon: "error",
@@ -319,7 +334,7 @@ var KTSignupGeneral = function () {
         // Handle password input
         form.querySelector('input[name="password1"]').addEventListener('input', function () {
             if (this.value.length > 0) {
-                validator.updateFieldStatus('password', 'NotValidated');
+                validator.updateFieldStatus('password1', 'NotValidated');
             }
         });
     }
@@ -349,9 +364,12 @@ var KTSignupGeneral = function () {
             passwordMeter = KTPasswordMeter.getInstance(form.querySelector('[data-kt-password-meter="true"]'));
 
             if (isValidUrl(submitButton.closest('form').getAttribute('action'))) {
+                console.log('tumetumia ajax')
                 handleFormAjax();
             } else {
-                handleForm();
+                console.log('tumetumia kawaida')
+
+                handleFormAjax();
             }
         }
     };

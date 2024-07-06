@@ -8,19 +8,28 @@ from django.http import JsonResponse
 
 # Create your views here.
 def register_user(request):
-    form = SignUpForm()
-
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
+
+            print("Form data received:")
+            print("Username:", form.cleaned_data['username'])
+            print("First Name:", form.cleaned_data['first_name'])
+            print("Last Name:", form.cleaned_data['last_name'])
+            print("Email:", form.cleaned_data['email'])
+
             user = form.save()  # Save the user
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
+            print("User authentication reached")
+            print(f'login details: user:{username} pass:{password}')
+
 
             if user is not None:
                 login(request, user)  # Log in the user
-                messages.success(request, "You have registered successfully!")
+                print("user logged in")
+                messages.success(request, "You have registered and logged in successfully!")
                 if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Check if the request is AJAX
                     return JsonResponse({'success': True})
                 else:
@@ -33,6 +42,8 @@ def register_user(request):
                 return JsonResponse({'success': False, 'errors': errors})
             else:
                 messages.error(request, "Registration failed. Please correct the errors.")
+    else:
+        form = SignUpForm()
 
     return render(request, 'b_auth/register.html', {'form': form})
 

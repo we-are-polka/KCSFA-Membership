@@ -126,3 +126,9 @@ DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Directory where uploaded media is saved.
 MEDIA_URL = '/media/' # Public URL at the browser
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default authentication backend
+    # Add any custom authentication backends if applicable
+]
