@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Events</title>
+</head>
+<body>
+    <h1>All events</h1>
+    <p>Below is all events:</p>
+
+    <ul>
+        {% for event in events %}
+        <li><a href="{% url 'single_event' event.id %}">Event 1</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

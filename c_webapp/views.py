@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
-from .models import Profile
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Profile, Event, EventCategory, CPDLog
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import UpdateUserForm, ChangePasswordForm, UserInfoForm
+from django.utils import timezone
 
 
 # Create your views here.
@@ -77,3 +78,24 @@ def update_user(request):
     else:
         messages.success(request, "You Must Be Logged In To Access That Page")
         return redirect('home')
+
+@login_required
+def all_events(request):
+    events = Event.objects.filter(date__gte=timezone.now()).order_by('date')  # Upcoming events
+    categories = EventCategory.objects.all()
+    context = {
+        'events': events,
+        'categories': categories,
+    }
+    return render(request, 'c_webapp/events.html', context)
+
+
+@login_required
+def single_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    is_registered = CPDLog.objects.filter(member__user=request.user, event=event).exists()
+    context = {
+        'event': event,
+        'is_registered': is_registered,
+    }
+    return render(request, 'c_webapp/single_event.html', context)
