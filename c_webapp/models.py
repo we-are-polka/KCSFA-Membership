@@ -46,6 +46,7 @@ def default_end_time():
 class Event(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
+    poster = models.ImageField(upload_to='events/posters/', default='KCSFA-DEFAULT-POSTER-LANDSCAPE.png')
     date = models.DateField(default=timezone.now)
     start_time = models.TimeField(default=timezone.now)
     end_time = models.TimeField(default=default_end_time)
