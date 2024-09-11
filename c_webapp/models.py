@@ -45,7 +45,8 @@ class Event(models.Model):
     date = models.DateField(default=timezone.now)
     location = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    attendees = models.ManyToManyField(Profile, through='CPDLog')  # Relates to attendees via CPDLog
+    fee = models.IntegerField(default=0)
+    # attendees = models.ManyToManyField(Profile, through='CPDLog')  # Relates to attendees via CPDLog
 
     def __str__(self):
         return self.name    

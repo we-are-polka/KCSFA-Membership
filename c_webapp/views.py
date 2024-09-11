@@ -93,9 +93,70 @@ def all_events(request):
 @login_required
 def single_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+    profile = get_object_or_404(Profile, user=request.user)
+
+    # Check if the user is already registered for the event
     is_registered = CPDLog.objects.filter(member__user=request.user, event=event).exists()
+
+    # Dynamically count the attendees
+    attendee_count = CPDLog.objects.filter(event=event).count()
+
     context = {
         'event': event,
         'is_registered': is_registered,
+        'attendee_count': attendee_count,  # Pass the attendee count to the template
+
     }
     return render(request, 'c_webapp/single_event.html', context)
+
+
+# Register for Event (RSVP)
+@login_required
+def register_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    profile = get_object_or_404(Profile, user=request.user)
+
+    # Check if the user is already registered for this event
+    if CPDLog.objects.filter(member=profile, event=event).exists():
+        return render(request, 'c_webapp/single_event.html', {
+            'event': event,
+            'is_registered': True,
+            'attendee_count': event.cpdlog_set.count(),
+            'error_message': 'You are already registered for this event.'
+        })
+
+    # Register the user for the event
+    CPDLog.objects.create(member=profile, event=event)
+
+    return render(request, 'c_webapp/single_event.html', {
+        'event': event,
+        'is_registered': True,
+        'attendee_count': event.cpdlog_set.count(),
+        'success_message': f'Successfully registered for {event.name}.'
+    })
+
+
+@login_required
+def unregister_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    profile = get_object_or_404(Profile, user=request.user)
+
+    # Check if the user is registered for this event
+    cpd_log = CPDLog.objects.filter(member=profile, event=event).first()
+    if not cpd_log:
+        return render(request, 'c_webapp/single_event.html', {
+            'event': event,
+            'is_registered': False,
+            'attendee_count': event.cpdlog_set.count(),
+            'error_message': 'You are not registered for this event.'
+        })
+
+    # Remove RSVP
+    cpd_log.delete()
+
+    return render(request, 'c_webapp/single_event.html', {
+        'event': event,
+        'is_registered': False,
+        'attendee_count': event.cpdlog_set.count(),
+        'success_message': f'You have successfully unregistered from {event.name}.'
+    })
