@@ -93,21 +93,27 @@ def all_events(request):
 @login_required
 def single_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    profile = get_object_or_404(Profile, user=request.user)
+    profile = request.user.profile
+    is_registered = CPDLog.objects.filter(member=profile, event=event).exists()
+    attendee_count = event.cpdlog_set.count()
 
-    # Check if the user is already registered for the event
-    is_registered = CPDLog.objects.filter(member__user=request.user, event=event).exists()
+    # Retrieve messages if they exist
+    success_message = None
+    error_message = None
+    for message in messages.get_messages(request):
+        if message.level == messages.SUCCESS:
+            success_message = message
+        elif message.level == messages.ERROR:
+            error_message = message
 
-    # Dynamically count the attendees
-    attendee_count = CPDLog.objects.filter(event=event).count()
-
-    context = {
+    # Pass the context, including attendee count, registration status, and messages
+    return render(request, 'c_webapp/single_event.html', {
         'event': event,
         'is_registered': is_registered,
-        'attendee_count': attendee_count,  # Pass the attendee count to the template
-
-    }
-    return render(request, 'c_webapp/single_event.html', context)
+        'attendee_count': attendee_count,
+        'success_message': success_message,
+        'error_message': error_message,
+    })
 
 
 # Register for Event (RSVP)
@@ -118,23 +124,16 @@ def register_event(request, event_id):
 
     # Check if the user is already registered for this event
     if CPDLog.objects.filter(member=profile, event=event).exists():
-        return render(request, 'c_webapp/single_event.html', {
-            'event': event,
-            'is_registered': True,
-            'attendee_count': event.cpdlog_set.count(),
-            'error_message': 'You are already registered for this event.'
-        })
+        messages.error(request, 'You are already registered for this event.')
+        return redirect('single_event', event_id=event_id)
 
     # Register the user for the event
     CPDLog.objects.create(member=profile, event=event)
 
-    return render(request, 'c_webapp/single_event.html', {
-        'event': event,
-        'is_registered': True,
-        'attendee_count': event.cpdlog_set.count(),
-        'success_message': f'Successfully registered for {event.name}.'
-    })
+    # Add the success message
+    messages.success(request, f'Successfully registered for <br> {event.name}.')
 
+    return redirect('single_event', event_id=event_id)
 
 @login_required
 def unregister_event(request, event_id):
@@ -144,19 +143,17 @@ def unregister_event(request, event_id):
     # Check if the user is registered for this event
     cpd_log = CPDLog.objects.filter(member=profile, event=event).first()
     if not cpd_log:
-        return render(request, 'c_webapp/single_event.html', {
-            'event': event,
-            'is_registered': False,
-            'attendee_count': event.cpdlog_set.count(),
-            'error_message': 'You are not registered for this event.'
-        })
+        messages.error(request, 'You are not registered for this event.')
+        return redirect('single_event', event_id=event_id)
 
-    # Remove RSVP
+    # Deduct the points acquired from this event
+    profile.total_cpd_points -= event.category.points_per_event
+    profile.save()
+
+    # Remove the RSVP
     cpd_log.delete()
 
-    return render(request, 'c_webapp/single_event.html', {
-        'event': event,
-        'is_registered': False,
-        'attendee_count': event.cpdlog_set.count(),
-        'success_message': f'You have successfully unregistered from {event.name}.'
-    })
+    # Add the success message
+    messages.success(request, f'You have successfully unregistered from <br> {event.name}.')
+
+    return redirect('single_event', event_id=event_id)

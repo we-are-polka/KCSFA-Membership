@@ -36,5 +36,20 @@
         </form>
     {% endif %}
 
+    <!--begin::Actions-->       
+{% if is_registered %}
+<form action="{% url 'unregister_event' event.id %}" method="POST">
+    {% csrf_token %}
+    <button class="btn btn-sm btn-danger ms-3 px-4 py-3" type="submit">Remove RSVP</button>
+</form>
+{% else %}
+<form action="{% url 'register_event' event.id %}" method="POST">
+    {% csrf_token %}
+    <button class="btn btn-sm btn-success ms-3 px-4 py-3" type="submit">RSVP to this event</button>
+</form>
+{% endif %}
+
+<!--end::Actions-->
+
 </body>
 </html>

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 import datetime
 from django.utils import timezone
+from datetime import timedelta
 
 # Create your models here.
 
@@ -38,18 +39,25 @@ class EventCategory(models.Model):
         return self.name
 
 
+def default_end_time():
+    return (timezone.now() + timedelta(hours=2)).time()
+
 # Event or Training
 class Event(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
     date = models.DateField(default=timezone.now)
+    start_time = models.TimeField(default=timezone.now)
+    end_time = models.TimeField(default=default_end_time)
     location = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     fee = models.IntegerField(default=0)
     # attendees = models.ManyToManyField(Profile, through='CPDLog')  # Relates to attendees via CPDLog
 
+
     def __str__(self):
         return self.name    
+        
 
 
 # CPD Log (Tracks CPD points for each member attending events)
