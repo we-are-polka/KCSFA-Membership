@@ -163,6 +163,5 @@ UNFOLD = {
             "title": _("Lagoon Home"),
             "link": "/profile",
         },
-        # ...
     ],
 }

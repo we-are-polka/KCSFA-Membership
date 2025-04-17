@@ -38,6 +38,9 @@ class EventCategory(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = 'Event Categories'
+
 
 def default_end_time():
     return (timezone.now() + timedelta(hours=2)).time()
@@ -80,3 +83,6 @@ class CPDLog(models.Model):
 
     def __str__(self):
         return f"{self.member.user.username} - {self.event.name} - {self.points_earned} Points"        
+
+    class Meta:
+        verbose_name_plural = 'CPD Logs'
