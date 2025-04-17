@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,12 +27,17 @@ SECRET_KEY = '%75wl&hex-8^a$e1e_yv=pp%wu3u9r350sc6ttlak*xvht_&zk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kcsfa-membership.onrender.com']
+ALLOWED_HOSTS = ['kcsfa-membership.onrender.com','127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # unfold
+    'unfold',
+    'unfold.contrib.filters',
+    'unfold.contrib.forms',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,3 +152,17 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOWED_ORIGINS = [
     "https://kcsfa-membership.onrender.com",
 ]
+
+UNFOLD = {
+    "SITE_TITLE": "KSCFA Lagoon Admin",
+    "SITE_HEADER": "Lagoon Admin",
+    # "SITE_SUBHEADER": "KCSFA",
+    "SITE_DROPDOWN": [
+        {
+            "icon": "globe",
+            "title": _("Lagoon Home"),
+            "link": "/profile",
+        },
+        # ...
+    ],
+}

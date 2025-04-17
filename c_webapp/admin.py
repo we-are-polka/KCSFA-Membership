@@ -1,8 +1,20 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 from .models import Profile, Event, EventCategory, CPDLog
 
 # Register your models here.
-admin.site.register(Profile)
-admin.site.register(Event)
-admin.site.register(EventCategory)
-admin.site.register(CPDLog)
+@admin.register(Profile)
+class ProfileAdmin(ModelAdmin):
+    pass
+
+@admin.register(Event)
+class EventAdmin(ModelAdmin):
+    pass
+
+@admin.register(EventCategory)
+class EventCategoryAdmin(ModelAdmin):
+    pass
+
+@admin.register(CPDLog)
+class CPDLogAdmin(ModelAdmin):
+    pass
