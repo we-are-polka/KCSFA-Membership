@@ -81,7 +81,8 @@ def update_user(request):
 
 @login_required
 def all_events(request):
-    events = Event.objects.filter(date__gte=timezone.now()).order_by('date')  # Upcoming events
+    # events = Event.objects.filter(date__gte=timezone.now()).order_by('date')  # Upcoming events
+    events = Event.objects.all()  # Upcoming events
     categories = EventCategory.objects.all()
     context = {
         'events': events,
@@ -157,3 +158,7 @@ def unregister_event(request, event_id):
     messages.success(request, f'You have successfully unregistered from <br> {event.name}.')
 
     return redirect('single_event', event_id=event_id)
+
+@login_required
+def cpd_points(request):
+     return render(request, "c_webapp/cpd-points.html")
