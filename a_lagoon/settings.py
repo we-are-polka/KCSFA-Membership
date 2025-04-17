@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'b_auth',
     'c_webapp',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'a_lagoon.urls'
@@ -134,4 +136,12 @@ LOGIN_URL = '/auth/login/'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default authentication backend
     # Add any custom authentication backends if applicable
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://kcsfa-membership.onrender.com',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://kcsfa-membership.onrender.com",
 ]
