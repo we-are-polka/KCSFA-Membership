@@ -25,7 +25,7 @@ SECRET_KEY = '%75wl&hex-8^a$e1e_yv=pp%wu3u9r350sc6ttlak*xvht_&zk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kcsfa-membership.onrender.com/']
+ALLOWED_HOSTS = ['kcsfa-membership.onrender.com']
 
 
 # Application definition
